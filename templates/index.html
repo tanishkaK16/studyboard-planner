@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyBoard — Your Aesthetic Study Planner</title>
+  <meta name="description" content="Pinterest-inspired study and work planner for engineering students. Track goals, manage time, plan your 4-year journey.">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Mobile Menu -->
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" id="mobileMenuBtn">☰</button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="logo-icon">📖</div>
+          <div>
+            <h1>StudyBoard</h1>
+            <p>Study Planner</p>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Overview</div>
+        <div class="nav-item active" data-section="dashboard" onclick="switchSection('dashboard')">
+          <span class="nav-icon">🏠</span> Dashboard
+        </div>
+        <div class="nav-section-label">Productivity</div>
+        <div class="nav-item" data-section="todos" onclick="switchSection('todos')">
+          <span class="nav-icon">✅</span> Todo List
+          <span class="nav-badge" id="todoBadge">0</span>
+        </div>
+        <div class="nav-item" data-section="goals" onclick="switchSection('goals')">
+          <span class="nav-icon">🎯</span> Goals
+        </div>
+        <div class="nav-item" data-section="timetable" onclick="switchSection('timetable')">
+          <span class="nav-icon">📅</span> Timetable
+        </div>
+        <div class="nav-item" data-section="notes" onclick="switchSection('notes')">
+          <span class="nav-icon">📝</span> Notes
+        </div>
+        <div class="nav-item" data-section="work" onclick="switchSection('work')">
+          <span class="nav-icon">⏱️</span> Work Tracker
+        </div>
+        <div class="nav-section-label">Wellness</div>
+        <div class="nav-item" data-section="water" onclick="switchSection('water')">
+          <span class="nav-icon">💧</span> Water Intake
+        </div>
+        <div class="nav-item" data-section="workout" onclick="switchSection('workout')">
+          <span class="nav-icon">💪</span> Workout
+        </div>
+        <div class="nav-item" data-section="gratitude" onclick="switchSection('gratitude')">
+          <span class="nav-icon">🌸</span> Gratitude Journal
+        </div>
+        <div class="nav-section-label">Academic</div>
+        <div class="nav-item" data-section="planner" onclick="switchSection('planner')">
+          <span class="nav-icon">🎓</span> 4-Year Planner
+        </div>
+        <div class="nav-section-label">Memories</div>
+        <div class="nav-item" data-section="photobooth" onclick="switchSection('photobooth')">
+          <span class="nav-icon">📸</span> Photobooth
+        </div>
+        <div class="nav-item" data-section="photodump" onclick="switchSection('photodump')">
+          <span class="nav-icon">🖼️</span> Photo Dump
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- ═══ DASHBOARD ═══ -->
+      <div class="section active" id="section-dashboard">
+        <div class="page-header">
+          <h2>Good <span id="greetingTime">Morning</span>, Scholar ✨</h2>
+          <div class="header-actions">
+            <span class="date-display" id="currentDate"></span>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="greeting-card">
+            <h2>Welcome to StudyBoard</h2>
+            <p>Your aesthetic companion for academic excellence. Plan your day, track your goals, and build the future you deserve.</p>
+          </div>
+          <div class="quote-card" id="quoteCard">
+            <div class="quote-icon">❝</div>
+            <div class="quote-text" id="quoteText">Loading inspiration...</div>
+            <div class="quote-author" id="quoteAuthor">— Loading...</div>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value" id="statTodos">0</div>
+            <div class="stat-label">Tasks Done Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💧</div>
+            <div class="stat-value" id="statWater">0/8</div>
+            <div class="stat-label">Glasses of Water</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-value" id="statPomodoro">0</div>
+            <div class="stat-label">Focus Sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💪</div>
+            <div class="stat-value" id="statWorkout">0</div>
+            <div class="stat-label">Workouts Done</div>
+          </div>
+        </div>
+        <!-- Today's Goals Preview -->
+        <div style="margin-top: 24px;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🎯 Today's Goals</div>
+              <button class="btn btn-sm btn-secondary" onclick="switchSection('goals')">View All</button>
+            </div>
+            <div id="dashboardGoals">
+              <div class="empty-state"><div class="empty-icon">🎯</div><p>No goals set for today. Click Goals to add some!</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ TODO LIST ═══ -->
+      <div class="section" id="section-todos">
+        <div class="page-header">
+          <h2>📋 Todo <span>List</span></h2>
+        </div>
+        <div class="card">
+          <div class="todo-input-wrapper">
+            <input type="text" id="todoInput" placeholder="What do you need to do?" onkeypress="if(event.key==='Enter')addTodo()">
+            <select id="todoCategory" style="width: auto; min-width: 120px;">
+              <option value="study">📚 Study</option>
+              <option value="work">💼 Work</option>
+              <option value="personal">🌿 Personal</option>
+              <option value="urgent">🔥 Urgent</option>
+            </select>
+            <select id="todoPriority" style="width: auto; min-width: 100px;">
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="low">Low</option>
+            </select>
+            <button class="btn btn-primary" onclick="addTodo()">＋ Add</button>
+          </div>
+          <div class="todo-filters">
+            <button class="todo-filter-btn active" onclick="filterTodos('all', this)">All</button>
+            <button class="todo-filter-btn" onclick="filterTodos('active', this)">Active</button>
+            <button class="todo-filter-btn" onclick="filterTodos('completed', this)">Completed</button>
+            <button class="todo-filter-btn" onclick="filterTodos('study', this)">📚 Study</button>
+            <button class="todo-filter-btn" onclick="filterTodos('work', this)">💼 Work</button>
+            <button class="todo-filter-btn" onclick="filterTodos('personal', this)">🌿 Personal</button>
+            <button class="todo-filter-btn" onclick="filterTodos('urgent', this)">🔥 Urgent</button>
+          </div>
+          <div id="todoList"></div>
+        </div>
+      </div>
+
+      <!-- ═══ GOALS ═══ -->
+      <div class="section" id="section-goals">
+        <div class="page-header">
+          <h2>🎯 Goals <span>Tracker</span></h2>
+        </div>
+        <div class="goals-tabs">
+          <button class="goals-tab active" onclick="switchGoalTab('daily', this)">Daily</button>
+          <button class="goals-tab" onclick="switchGoalTab('weekly', this)">Weekly</button>
+          <button class="goals-tab" onclick="switchGoalTab('monthly', this)">Monthly</button>
+        </div>
+        <div class="tab-content active" id="goals-daily">
+          <div class="quick-add-row">
+            <input type="text" id="dailyGoalInput" placeholder="Add a daily goal...">
+            <button class="btn btn-primary" onclick="addGoal('daily')">＋ Add</button>
+          </div>
+          <div id="dailyGoalsList"></div>
+        </div>
+        <div class="tab-content" id="goals-weekly">
+          <div class="quick-add-row">
+            <input type="text" id="weeklyGoalInput" placeholder="Add a weekly goal...">
+            <button class="btn btn-primary" onclick="addGoal('weekly')">＋ Add</button>
+          </div>
+          <div id="weeklyGoalsList"></div>
+        </div>
+        <div class="tab-content" id="goals-monthly">
+          <div class="quick-add-row">
+            <input type="text" id="monthlyGoalInput" placeholder="Add a monthly goal...">
+            <button class="btn btn-primary" onclick="addGoal('monthly')">＋ Add</button>
+          </div>
+          <div id="monthlyGoalsList"></div>
+        </div>
+      </div>
+
+      <!-- ═══ TIMETABLE ═══ -->
+      <div class="section" id="section-timetable">
+        <div class="page-header">
+          <h2>📅 Weekly <span>Timetable</span></h2>
+          <button class="btn btn-primary" onclick="openTimetableModal()">＋ Add Class</button>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="timetable-grid" id="timetableGrid"></div>
+        </div>
+      </div>
+
+      <!-- ═══ NOTES ═══ -->
+      <div class="section" id="section-notes">
+        <div class="page-header">
+          <h2>📝 My <span>Notes</span></h2>
+          <button class="btn btn-primary" onclick="openNoteModal()">＋ New Note</button>
+        </div>
+        <div class="quick-add-row">
+          <input type="text" id="noteSearch" placeholder="🔍 Search notes..." oninput="searchNotes()">
+        </div>
+        <div class="notes-grid" id="notesGrid"></div>
+      </div>
+
+      <!-- ═══ WATER INTAKE ═══ -->
+      <div class="section" id="section-water">
+        <div class="page-header">
+          <h2>💧 Water <span>Intake</span></h2>
+        </div>
+        <div class="card">
+          <div class="water-container">
+            <div class="water-progress-text"><span id="waterCount">0</span><span> / 8 glasses</span></div>
+            <div class="water-subtitle">Stay hydrated! Click a glass to fill it 💙</div>
+            <div class="water-glasses" id="waterGlasses"></div>
+            <button class="btn btn-secondary" onclick="resetWater()">🔄 Reset Today</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ WORKOUT ═══ -->
+      <div class="section" id="section-workout">
+        <div class="page-header">
+          <h2>💪 Workout <span>Tracker</span></h2>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Log Exercise</div>
+          </div>
+          <div class="quick-add-row">
+            <select id="workoutType" style="min-width: 140px;">
+              <option value="🏃 Running">🏃 Running</option>
+              <option value="🏋️ Weight Training">🏋️ Weight Training</option>
+              <option value="🧘 Yoga">🧘 Yoga</option>
+              <option value="🚴 Cycling">🚴 Cycling</option>
+              <option value="🏊 Swimming">🏊 Swimming</option>
+              <option value="🤸 Stretching">🤸 Stretching</option>
+              <option value="🚶 Walking">🚶 Walking</option>
+              <option value="💃 Dance">💃 Dance</option>
+            </select>
+            <input type="number" id="workoutDuration" placeholder="Duration (min)" style="min-width: 120px;">
+            <input type="text" id="workoutNotes" placeholder="Notes (optional)">
+            <button class="btn btn-primary" onclick="addWorkout()">＋ Log</button>
+          </div>
+        </div>
+        <div style="margin-top: 20px;" id="workoutLog"></div>
+      </div>
+
+      <!-- ═══ WORK TRACKER / POMODORO ═══ -->
+      <div class="section" id="section-work">
+        <div class="page-header">
+          <h2>⏱️ Work <span>Tracker</span></h2>
+        </div>
+        <div class="card">
+          <div class="pomodoro-container">
+            <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
+            <div class="pomodoro-label" id="pomodoroLabel">Focus Time</div>
+            <div class="pomodoro-controls">
+              <button class="btn btn-primary btn-round" id="pomodoroStart" onclick="togglePomodoro()">▶ Start</button>
+              <button class="btn btn-secondary btn-round" onclick="resetPomodoro()">⟳ Reset</button>
+              <button class="btn btn-secondary btn-round" onclick="skipPomodoro()">⏭ Skip</button>
+            </div>
+            <div class="pomodoro-sessions" id="pomodoroSessions"></div>
+          </div>
+        </div>
+        <div style="margin-top: 20px;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📊 Today's Sessions</div>
+            </div>
+            <div id="sessionLog"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ GRATITUDE JOURNAL ═══ -->
+      <div class="section" id="section-gratitude">
+        <div class="page-header">
+          <h2>�� Gratitude <span>Journal</span></h2>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Today's Entry</div>
+            <span class="date-display" id="journalDate"></span>
+          </div>
+          <div class="form-group">
+            <label>How are you feeling today?</label>
+            <div class="mood-selector" id="moodSelector">
+              <button class="mood-btn" data-mood="amazing" onclick="selectMood('amazing', this)">🤩</button>
+              <button class="mood-btn" data-mood="happy" onclick="selectMood('happy', this)">😊</button>
+              <button class="mood-btn" data-mood="good" onclick="selectMood('good', this)">🙂</button>
+              <button class="mood-btn" data-mood="okay" onclick="selectMood('okay', this)">😐</button>
+              <button class="mood-btn" data-mood="sad" onclick="selectMood('sad', this)">😢</button>
+              <button class="mood-btn" data-mood="stressed" onclick="selectMood('stressed', this)">😰</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>I am grateful for...</label>
+            <div class="quick-add-row">
+              <input type="text" id="gratitudeInput" placeholder="Something you're grateful for...">
+              <button class="btn btn-accent" onclick="addGratitude()">＋</button>
+            </div>
+            <ul class="gratitude-list" id="gratitudeList"></ul>
+          </div>
+          <div class="form-group">
+            <label>Today's Reflection</label>
+            <textarea id="reflectionInput" placeholder="How was your day? What did you learn? What would you do differently?"></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="saveJournalEntry()" style="margin-top: 8px;">💾 Save Entry</button>
+        </div>
+        <div style="margin-top: 24px;">
+          <h3 style="margin-bottom: 16px;">📜 Past Entries</h3>
+          <div id="journalEntries"></div>
+        </div>
+      </div>
+
+      <!-- ═══ 4-YEAR PLANNER ═══ -->
+      <div class="section" id="section-planner">
+        <div class="page-header">
+          <h2>🎓 4-Year <span>Engineering Planner</span></h2>
+        </div>
+        <div class="planner-years">
+          <button class="year-tab active" onclick="switchYear(1, this)">Year 1</button>
+          <button class="year-tab" onclick="switchYear(2, this)">Year 2</button>
+          <button class="year-tab" onclick="switchYear(3, this)">Year 3</button>
+          <button class="year-tab" onclick="switchYear(4, this)">Year 4</button>
+        </div>
+        <div id="yearContent"></div>
+        <div style="margin-top: 24px;">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">📊 CGPA Calculator</div>
+              </div>
+              <div class="gpa-display" style="margin-bottom: 16px;">CGPA: <span id="cgpaValue">0.00</span></div>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">Add courses with grades to calculate your CGPA automatically.</p>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">🛠️ Skills Acquired</div>
+                <button class="btn btn-sm btn-secondary" onclick="openSkillModal()">＋ Add</button>
+              </div>
+              <div class="skills-grid" id="skillsGrid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PHOTOBOOTH ═══ -->
+      <div class="section" id="section-photobooth">
+        <div class="page-header">
+          <h2>📸 Photo<span>booth</span></h2>
+        </div>
+        <div class="card">
+          <div class="photobooth-container">
+            <div class="camera-view" id="cameraView">
+              <video id="cameraVideo" autoplay playsinline></video>
+              <canvas id="cameraCanvas" style="display:none;"></canvas>
+            </div>
+            <div class="camera-controls">
+              <button class="btn btn-secondary btn-round" onclick="startCamera()">📷 Start Camera</button>
+              <button class="capture-btn" onclick="capturePhoto()" title="Capture"></button>
+              <button class="btn btn-secondary btn-round" onclick="stopCamera()">⏹ Stop</button>
+            </div>
+            <div class="photo-strip" id="photoStrip"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PHOTO DUMP ═══ -->
+      <div class="section" id="section-photodump">
+        <div class="page-header">
+          <h2>🖼️ Monthly <span>Photo Dump</span></h2>
+        </div>
+        <div class="upload-area" onclick="document.getElementById('photoDumpInput').click()">
+          <div class="upload-icon">📁</div>
+          <p>Click to upload photos or drag & drop</p>
+          <input type="file" id="photoDumpInput" accept="image/*" multiple style="display:none;" onchange="uploadPhotoDump(event)">
+        </div>
+        <div class="photo-dump-grid" id="photoDumpGrid"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Chatbot -->
+  <button class="chatbot-toggle" onclick="toggleChat()" id="chatToggle">💬</button>
+  <div class="chatbot-panel" id="chatPanel">
+    <div class="chat-header">
+      <div class="chat-avatar">🤖</div>
+      <div>
+        <h4>Study Buddy</h4>
+        <p>Your AI assistant</p>
+      </div>
+      <button class="chat-close" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-message bot">👋 Hi! I'm your study buddy. Ask me about study tips, career guidance, exam prep, coding, and more!</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter')sendChat()">
+      <button class="chat-send-btn" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add Item</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Photo">
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
