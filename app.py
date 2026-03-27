@@ -6,7 +6,7 @@ from datetime import datetime
 import base64
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', '/tmp/uploads')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # ─── Motivational Quotes ───
